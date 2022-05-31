@@ -1,26 +1,12 @@
 package main
 
 import (
-	"html/template"
 	"net/http"
 
-	product "github.com/fabioboris/go-web-app/models"
+	"github.com/fabioboris/go-web-app/routes"
 )
 
-var templates = template.Must(template.ParseGlob("templates/*.html"))
-
 func main() {
-	http.HandleFunc("/", index)
+	routes.LoadRoutes()
 	http.ListenAndServe(":8000", nil)
-}
-
-func index(w http.ResponseWriter, r *http.Request) {
-	products := product.GetAllProducts()
-	templates.ExecuteTemplate(w, "Index", products)
-}
-
-func CheckError(err error) {
-	if err != nil {
-		panic(err)
-	}
 }
