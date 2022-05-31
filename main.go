@@ -1,25 +1,11 @@
 package main
 
 import (
-	"database/sql"
 	"html/template"
 	"net/http"
 
-	_ "github.com/lib/pq"
+	product "github.com/fabioboris/go-web-app/models"
 )
-
-func connectToDB() *sql.DB {
-	connStr := "user=fabioboris dbname=playground sslmode=disable"
-	db, err := sql.Open("postgres", connStr)
-	CheckError(err)
-	return db
-}
-
-type Product struct {
-	Name  string
-	Price float64
-	Qty   int
-}
 
 var templates = template.Must(template.ParseGlob("templates/*.html"))
 
@@ -29,21 +15,7 @@ func main() {
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
-	db := connectToDB()
-	defer db.Close()
-
-	rows, err := db.Query("SELECT name, price, quantity FROM products")
-	CheckError(err)
-
-	products := []Product{}
-
-	for rows.Next() {
-		var p Product
-		err := rows.Scan(&p.Name, &p.Price, &p.Qty)
-		CheckError(err)
-		products = append(products, p)
-	}
-
+	products := product.GetAllProducts()
 	templates.ExecuteTemplate(w, "Index", products)
 }
 
