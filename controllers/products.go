@@ -10,6 +10,6 @@ import (
 var templates = template.Must(template.ParseGlob("templates/*.html"))
 
 func Index(w http.ResponseWriter, r *http.Request) {
-	products := product.GetAllProducts()
+	products := product.GetAll()
 	templates.ExecuteTemplate(w, "Index", products)
 }

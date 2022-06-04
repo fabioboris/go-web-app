@@ -8,8 +8,8 @@ type Product struct {
 	Qty   int
 }
 
-func GetAllProducts() []Product {
-	db := db.ConnectToDB()
+func GetAll() []Product {
+	db := db.Connect()
 	defer db.Close()
 
 	rows, err := db.Query("SELECT name, price, quantity FROM products")
